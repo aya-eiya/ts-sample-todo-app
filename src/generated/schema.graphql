@@ -9,7 +9,7 @@ type Query {
   add(id: ID, schedule: date, title: String): Todo
   create(schedule: date, title: String): Todo
   readAll: [Todo]
-  update(id: ID, schedule: date, title: String): Boolean
+  update(id: ID, schedule: date, title: String): Todo
 }
 
 type Todo {
