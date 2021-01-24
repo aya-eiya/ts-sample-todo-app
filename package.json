@@ -5,6 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "ts-node-dev --no-notify --respawn src/index.ts",
+    "lint": "eslint . --ext .js,.ts",
+    "lint-fix": "eslint . --ext .js,.ts --fix",
     "test": "jest"
   },
   "jest": {
@@ -16,6 +18,7 @@
   "author": "h.ayabe",
   "license": "MIT",
   "dependencies": {
+    "typescript": "latest",
     "apollo-server": "^2.19.2",
     "graphql": "^15.4.0",
     "nexus": "^1.0.0"
@@ -28,6 +31,9 @@
     "eslint-plugin-import": "latest",
     "eslint-plugin-jsdoc": "latest",
     "eslint-plugin-no-null": "latest",
+    "@typescript-eslint/parser": "latest",
+    "@typescript-eslint/eslint-plugin": "latest",
+    "@typescript-eslint/experimental-utils": "latest",
     "minimist": "latest"
   }
 }
