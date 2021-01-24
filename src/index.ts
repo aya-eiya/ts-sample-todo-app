@@ -1,9 +1,7 @@
-import { queryType, stringArg, makeSchema } from "nexus";
+import { makeSchema } from "nexus";
 import { ApolloServer } from "apollo-server";
 import path from "path";
 import * as Query from "./api";
-
-import { TodoRepository } from "./domains";
 
 const schema = makeSchema({
   types: Query,
