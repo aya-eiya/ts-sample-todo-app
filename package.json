@@ -1,0 +1,25 @@
+{
+  "name": "simple-todo-app",
+  "version": "1.0.0",
+  "description": "typescript simple todo app.",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "ts-node-dev --no-notify --respawn src/index.ts",
+    "test": "jest"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/__utils"
+    ]
+  },
+  "author": "h.ayabe",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server": "^2.19.2",
+    "graphql": "^15.4.0",
+    "jest": "^26.6.3",
+    "nexus": "^1.0.0",
+    "ts-node-dev": "^1.1.1"
+  }
+}
