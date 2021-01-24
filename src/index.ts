@@ -1,20 +1,15 @@
 import { queryType, stringArg, makeSchema } from 'nexus'
 import { ApolloServer } from 'apollo-server'
+import path from 'path'
+import * as Query from './api'
 
-const Query = queryType({
-  definition(t) {
-    t.string('hello', {
-      args: { name: stringArg() },
-      resolve: (parent, { name }) => `Hello ${name || 'World'}!`,
-    })
-  },
-})
+import { TodoRepository } from './domains'
 
 const schema = makeSchema({
-  types: [Query],
+  types: Query,
   outputs: {
-    schema: __dirname + '/generated/schema.graphql',
-    typegen: __dirname + '/generated/typings.ts',
+    schema: path.join(__dirname , 'generated/schema.graphql'),
+    typegen: path.join(__dirname , 'generated/types.ts'),
   },
 })
 
