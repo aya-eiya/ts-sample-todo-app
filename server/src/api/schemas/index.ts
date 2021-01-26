@@ -1,8 +1,10 @@
 import { Kind } from "graphql";
 import { arg, idArg, list, objectType, queryType, scalarType, stringArg } from "nexus";
-import { Schedule, Todo, TodoId } from "../../domains";
+import { Schedule, Todo as DomainTodo, TodoId } from "../../domains";
 import { InMemoryTodoRepository } from "../../infra/InMemoryTodoRepository";
+import { Todo as ApiTodo } from "../models";
 
+// TODO: use DI
 const repo = InMemoryTodoRepository.getInstance();
 
 const date = scalarType({
@@ -53,7 +55,7 @@ class UpdateSchedule implements Schedule {
   date: Date;
 }
 
-class UpdateTodo implements Todo {
+class UpdateTodo implements DomainTodo {
   constructor(id: TodoId, title: string, scheduledDate: Date) {
     this._id = id;
     this.title = title;
@@ -67,6 +69,21 @@ class UpdateTodo implements Todo {
   }
 }
 
+class OutputTodo implements ApiTodo {
+  private constructor(todo: DomainTodo) {
+    this.id = todo.id().value;
+    this.title = todo.title;
+    this.schedule = todo.schedule.date;
+  }
+  static of(todo: DomainTodo): ApiTodo {
+    return new OutputTodo(todo);
+  }
+  id: string;
+  title: string;
+  schedule: Date;
+
+}
+
 export const Query = queryType({
   definition(t) {
     t.field("create", {
@@ -77,11 +94,7 @@ export const Query = queryType({
           title || "todo",
           schedule
         );
-        return {
-          id: todo.id().value,
-          title: todo.title,
-          schedule: todo.schedule.date
-        };
+        return OutputTodo.of(todo);
       }
     });
 
@@ -95,24 +108,14 @@ export const Query = queryType({
           schedule
         );
         const todo = await repo.add(newTodo);
-        return {
-          id: todo.id().value,
-          title: todo.title,
-          schedule: todo.schedule.date
-        };
+        return OutputTodo.of(todo);
       }
     });
 
     t.field("readAll", {
       type: list(TypeTodo),
       async resolve(_, _args) {
-        return (await repo.readAll()).map(
-          (todo) => ({
-            id: todo.id().value,
-            title: todo.title,
-            schedule: todo.schedule.date
-          })
-        );
+        return (await repo.readAll()).map(OutputTodo.of);
       }
     });
 
@@ -125,11 +128,7 @@ export const Query = queryType({
           title || "todo",
           schedule
         ));
-        return {
-          id: todo.id().value,
-          title: todo.title,
-          schedule: todo.schedule.date
-        };
+        return OutputTodo.of(todo);
       }
     });
   }

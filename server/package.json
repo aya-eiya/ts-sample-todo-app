@@ -16,7 +16,8 @@
     ]
   },
   "author": "h.ayabe",
-  "license": "MIT",
+  "private": true,
+  "license": "ISC",
   "dependencies": {
     "typescript": "latest",
     "apollo-server": "^2.19.2",
