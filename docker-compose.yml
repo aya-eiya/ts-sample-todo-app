@@ -12,5 +12,6 @@ services:
     ports:
       - "3000:3000"
     volumes:
+      - ./server/src/generated/:/opt/server/src/generated
       - ./web:/opt/app
       - /opt/app/node_modules

@@ -1,16 +1,16 @@
-import { Kind } from "graphql";
-import { arg, idArg, list, objectType, queryType, scalarType, stringArg } from "nexus";
-import { Schedule, Todo as DomainTodo, TodoId } from "../../domains";
-import { InMemoryTodoRepository } from "../../infra/InMemoryTodoRepository";
-import { Todo as ApiTodo } from "../models";
+import { Kind } from 'graphql';
+import { arg, idArg, list, objectType, queryType, scalarType, stringArg, nonNull } from 'nexus';
+import { Schedule, Todo as DomainTodo, TodoId } from '../../domains';
+import { InMemoryTodoRepository } from '../../infra/InMemoryTodoRepository';
+import { Todo as ApiTodo } from '../models';
 
 // TODO: use DI
 const repo = InMemoryTodoRepository.getInstance();
 
 const date = scalarType({
-  name: "date",
-  asNexusMethod: "date",
-  description: "Date custom scalar type",
+  name: 'date',
+  asNexusMethod: 'date',
+  description: 'Date custom scalar type',
   parseValue(value) {
     return new Date(value);
   },
@@ -26,26 +26,26 @@ const date = scalarType({
 });
 
 export const TypeTodo = objectType({
-  name: "Todo",
+  name: 'Todo',
   definition(t) {
-    t.id("id");
-    t.string("title");
-    t.field("schedule", { type: date });
+    t.nonNull.id('id');
+    t.nonNull.string('title');
+    t.nonNull.field('schedule', { type: date });
   }
 });
 
 const createArgs = {
-  title: stringArg(),
-  schedule: arg({
+  title: nonNull(stringArg()),
+  schedule: nonNull(arg({
     type: date
-  })
+  }))
 };
 const updateArgs = {
-  id: idArg(),
-  title: stringArg(),
-  schedule: arg({
+  id: nonNull(idArg()),
+  title: nonNull(stringArg()),
+  schedule: nonNull(arg({
     type: date
-  })
+  }))
 };
 
 class UpdateSchedule implements Schedule {
@@ -86,25 +86,25 @@ class OutputTodo implements ApiTodo {
 
 export const Query = queryType({
   definition(t) {
-    t.field("create", {
+    t.field('create', {
       type: TypeTodo,
       args: createArgs,
       async resolve(_,{title , schedule}){
         const todo = await repo.create(
-          title || "todo",
+          title || 'todo',
           schedule
         );
         return OutputTodo.of(todo);
       }
     });
 
-    t.field("add", {
-      type: TypeTodo,
+    t.field('add', {
+      type: nonNull(TypeTodo),
       args: updateArgs,
       async resolve(_,{id, title, schedule}){
         const newTodo = new UpdateTodo(
-          id ? new TodoId(id) : new TodoId("new"),
-          title || "todo",
+          id ? new TodoId(id) : new TodoId('new'),
+          title || 'todo',
           schedule
         );
         const todo = await repo.add(newTodo);
@@ -112,20 +112,20 @@ export const Query = queryType({
       }
     });
 
-    t.field("readAll", {
-      type: list(TypeTodo),
+    t.field('readAll', {
+      type: nonNull(list(nonNull(TypeTodo))),
       async resolve(_, _args) {
         return (await repo.readAll()).map(OutputTodo.of);
       }
     });
 
-    t.field("update", {
-      type: TypeTodo,
+    t.field('update', {
+      type: nonNull(TypeTodo),
       args: updateArgs,
       async resolve(_,{id, title , schedule}) {
         const todo = await repo.update(new UpdateTodo(
-          new TodoId(id || "new"),
-          title || "todo",
+          new TodoId(id || 'new'),
+          title || 'todo',
           schedule
         ));
         return OutputTodo.of(todo);

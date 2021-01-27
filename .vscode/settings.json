@@ -1,5 +1,14 @@
 {
+  "css.validate": false,
+  "stylelint.enable": true,
   "cSpell.words": [
+    "codegen",
+    "stylelint",
+    "tailwindcss",
     "typegen"
+  ],
+  "editor.fontLigatures": null,
+  "auto-close-tag.disableOnLanguage": [
+    "typescript"
   ]
 }

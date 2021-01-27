@@ -1,5 +1,5 @@
-import { Todo } from "../models/todo";
-import { Schedule } from "../models/schedule";
+import { Todo } from '../models/todo';
+import { Schedule } from '../models/schedule';
 
 export interface TodoRepository {
   create(title: string, schedule: Schedule): Promise<Todo>
