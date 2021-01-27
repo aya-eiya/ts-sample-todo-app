@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  server:
+    build: ./server
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./server:/opt/app
+      - /opt/app/node_modules
+  web:
+    build: ./web
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./web:/opt/app
+      - /opt/app/node_modules

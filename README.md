@@ -6,8 +6,15 @@
 ## start server
 
 ```bash
+cd server
 npm install
-npm install -g typescript
-npm link typescript
 npm run start
+```
+
+## start web
+
+```bash
+cd web
+npm install
+npm run dev
 ```
