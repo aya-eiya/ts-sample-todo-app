@@ -1,4 +1,4 @@
-import Head from "next/head";
+import Head from 'next/head';
 
 export default function Home(): JSX.Element {
   return (
@@ -14,7 +14,7 @@ export default function Home(): JSX.Element {
         </h1>
 
         <p>
-          Get started by editing{" "}
+          Get started by editing{' '}
           <code>pages/index.js</code>
         </p>
 
@@ -55,7 +55,7 @@ export default function Home(): JSX.Element {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{" "}
+          Powered by{' '}
           <img src="/vercel.svg" alt="Vercel Logo" className="ml-2 h-4" />
         </a>
       </footer>

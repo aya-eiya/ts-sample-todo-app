@@ -9,13 +9,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "jest"
+    "test": "jest",
+    "codegen": "graphql-codegen --config codegen.yml"
   },
   "author": "h.ayabe",
   "license": "ISC",
   "private": true,
   "dependencies": {
     "autoprefixer": "latest",
+    "graphql": "latest",
+    "graphql-request": "latest",
     "next": "latest",
     "postcss": "latest",
     "react": "latest",
@@ -24,6 +27,11 @@
     "typescript": "latest"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "1.20.1",
+    "@graphql-codegen/typescript-operations": "latest",
+    "@graphql-codegen/typescript": "latest",
+    "@graphql-codegen/introspection": "latest",
+    "@graphql-codegen/typescript-graphql-request": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "@typescript-eslint/eslint-plugin": "latest",
@@ -36,6 +44,8 @@
     "eslint-plugin-no-null": "latest",
     "jest": "latest",
     "minimist": "latest",
+    "stylelint": "latest",
+    "stylelint-config-recommended": "latest",
     "ts-node-dev": "latest"
   }
 }

@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    "jsx": "react",
-    "jsx": "react",
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -28,6 +26,6 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "pages/_app.tsx"
+    "src/pages/_app.tsx"
   ]
 }
