@@ -20,23 +20,25 @@
   "private": true,
   "license": "ISC",
   "dependencies": {
-    "typescript": "latest",
     "apollo-server": "latest",
     "graphql": "latest",
     "nexus": "latest"
   },
   "devDependencies": {
     "jest": "latest",
-    "ts-node-dev": "latest",
     "eslint": "latest",
     "eslint-formatter-autolinkable-stylish": "latest",
     "eslint-plugin-import": "latest",
     "eslint-plugin-jsdoc": "latest",
     "eslint-plugin-no-null": "latest",
     "@graphql-codegen/cli": "latest",
+    "@types/jest": "^26.0.20",
     "@typescript-eslint/parser": "latest",
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/experimental-utils": "latest",
-    "minimist": "latest"
+    "minimist": "latest",
+    "typescript": "latest",
+    "ts-jest": "^26.4.4",
+    "ts-node-dev": "latest"
   }
 }

@@ -15,10 +15,11 @@ export class GqlTodoRepository implements TodoRepository {
   private client: GraphQLClient;
 
   private static instance: TodoRepository;
-  static getInstance() {
+  static getInstance(): TodoRepository {
     if(!this.instance) {
       this.instance = new GqlTodoRepository();
     }
+    return this.instance;
   }
 
   async readAll(): Promise<Todo[]> {

@@ -1,12 +1,10 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "lib": [
-      "es2015"
-    ],
+    "lib": ["es2015", "dom"],
     "strict": true,
     "skipLibCheck": true,
     "sourceMap": true,
@@ -15,17 +13,17 @@
     "noEmit": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "baseUrl": "./src/",
+    "paths": {
+      "#/*": ["*"]
+    }
   },
-  "exclude": [
-    "node_modules",
-    "**/*.test.ts",
-    "**/*.spec.ts"
-  ],
+  "exclude": ["node_modules"],
+  // "exclude": ["node_modules", "**/*.test.ts" , "**/*.spec.ts"],
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx",
-    "src/pages/_app.tsx"
+    "**/*.tsx"
   ]
 }
