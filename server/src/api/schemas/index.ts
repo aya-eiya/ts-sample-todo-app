@@ -8,20 +8,26 @@ import { Todo as ApiTodo } from '../models';
 const repo = InMemoryTodoRepository.getInstance();
 
 const date = scalarType({
-  name: 'date',
-  asNexusMethod: 'date',
+  name: 'Date',
+  asNexusMethod: 'Date',
   description: 'Date custom scalar type',
   parseValue(value) {
-    return new Date(value);
+    if(value){
+      return new Date(value);
+    }
+    throw Error(`perseValue: ${value}`);
   },
   serialize(value) {
-    return value.getTime();
+    if(value){
+      return value.getTime();
+    }
+    throw Error(`serialize: ${value}`);
   },
   parseLiteral(ast) {
     if (ast.kind === Kind.INT) {
-      return new Date(ast.value);
+      return new Date(parseInt(ast.value));
     }
-    return undefined;
+    throw Error(`parseLiteral: ${ast}`);
   },
 });
 
@@ -81,7 +87,6 @@ class OutputTodo implements ApiTodo {
   id: string;
   title: string;
   schedule: Date;
-
 }
 
 export const Query = queryType({
@@ -92,7 +97,7 @@ export const Query = queryType({
       async resolve(_,{title , schedule}){
         const todo = await repo.create(
           title || 'todo',
-          schedule
+          new UpdateSchedule(schedule)
         );
         return OutputTodo.of(todo);
       }
@@ -129,7 +134,7 @@ export const Mutation = mutationType({
       async resolve(_,{id, title , schedule}) {
         const todo = await repo.update(new UpdateTodo(
           new TodoId(id || 'new'),
-          title || 'todo',
+          title,
           schedule
         ));
         return OutputTodo.of(todo);

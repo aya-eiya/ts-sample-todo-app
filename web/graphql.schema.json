@@ -9,6 +9,16 @@
     "subscriptionType": null,
     "types": [
       {
+        "kind": "SCALAR",
+        "name": "Date",
+        "description": "Date custom scalar type",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "Mutation",
         "description": null,
@@ -41,7 +51,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "date",
+                    "name": "Date",
                     "ofType": null
                   }
                 },
@@ -106,7 +116,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "date",
+                    "name": "Date",
                     "ofType": null
                   }
                 },
@@ -186,7 +196,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "date",
+                    "name": "Date",
                     "ofType": null
                   }
                 },
@@ -279,7 +289,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "date",
+                "name": "Date",
                 "ofType": null
               }
             },
@@ -305,16 +315,6 @@
         ],
         "inputFields": null,
         "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "SCALAR",
-        "name": "date",
-        "description": "Date custom scalar type",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
       },

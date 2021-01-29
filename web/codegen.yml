@@ -1,14 +1,17 @@
 overwrite: true
-schema: ../server/src/generated/schema.graphql
+schema: ../server/src/generated/todo-schema.graphql
 documents: src/infra/gql/**/*.ts
 generates:
   src/infra/gql/types.d.ts:
     plugins:
       - typescript
       - typescript-operations
-  src/infra/gql/requests.ts:
+  src/infra/gql/todo/requests.ts:
     plugins:
       - typescript-graphql-request
+    config:
+      importOperationTypesFrom: '../type'
+      useTypeImports: true
   ./graphql.schema.json:
     plugins:
       - "introspection"

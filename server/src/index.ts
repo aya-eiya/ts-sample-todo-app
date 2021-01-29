@@ -1,13 +1,13 @@
-import { makeSchema } from "nexus";
-import { ApolloServer } from "apollo-server";
-import path from "path";
-import * as Query from "./api";
+import { makeSchema } from 'nexus';
+import { ApolloServer } from 'apollo-server';
+import path from 'path';
+import * as Query from './api';
 
 const schema = makeSchema({
   types: Query,
   outputs: {
-    schema: path.join(__dirname , "generated/schema.graphql"),
-    typegen: path.join(__dirname , "generated/types.ts"),
+    schema: path.join(__dirname , 'generated/todo-schema.graphql'),
+    typegen: path.join(__dirname , 'generated/todo-types.ts'),
   },
 });
 

@@ -1,7 +1,7 @@
 import { Todo } from '../../../domain/models/todo';
 import { TodoRepository } from '../../../domain/repositories/todoRepository';
 import { GraphQLClient } from 'graphql-request';
-import { getSdk } from '../requests';
+import { getSdk } from './requests';
 
 // TODO to build-time option
 const endpoint = 'http://localhost:4000/graphql';
@@ -22,21 +22,22 @@ export class GqlTodoRepository implements TodoRepository {
   }
 
   async readAll(): Promise<Todo[]> {
-    const sdk = getSdk(this.client);
-    const qry = await sdk.readAll();
-    const res = qry.readAll.map(t=>
-      new Todo(t.id, t.title, t.schedule)
+    return (await getSdk(this.client).readAll()).readAll.filter(t=>t !== undefined).map(t=>
+      Todo.of({...t})
     );
-    return res;
   }
 
-  async create(todo: Todo): Promise<Todo> {
+  async create(todo: Todo): Promise<Todo| undefined> {
+    const t = (await getSdk(this.client).create({...todo})).create;
+    if(t) {
+      return Todo.of({...t});
+    }
+    return undefined;
+  }
+  add(todo: Todo): Promise<Todo| undefined> {
     throw new Error('Method not implemented.');
   }
-  add(todo: Todo): Promise<Todo> {
-    throw new Error('Method not implemented.');
-  }
-  update(todo: Todo): Promise<Todo> {
+  update(todo: Todo): Promise<Todo| undefined> {
     throw new Error('Method not implemented.');
   }
   delete(todo: Todo): Promise<boolean> {

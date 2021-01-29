@@ -13,9 +13,19 @@ test('readAll() gets empty array', async () => {
   expect(todos).toEqual([]);
 });
 
-test('readAll() gets empty array', async () => {
+test('create() gets new item with initialized id', async () => {
   const repo: TodoRepository = GqlTodoRepository.getInstance();
-  repo.create();
-  const todos: Todo[] = await repo.readAll();
-  expect(todos).toEqual([]);
+  const title = 'my todo';
+  const schedule = new Date();
+  const todo = await repo.create(Todo.newItem({
+    title,
+    schedule
+  }));
+  if(todo) {
+    expect(todo.id).toEqual('new');
+    expect(todo.title).toEqual(title);
+    expect(todo.schedule).toEqual(schedule);
+  } else {
+    fail('create todo failed');
+  }
 });

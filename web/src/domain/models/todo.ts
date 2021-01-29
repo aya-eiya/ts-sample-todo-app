@@ -1,8 +1,19 @@
 export class Todo {
-  constructor(id: string,title: string,schedule: Date) {
+  static newItem({ title, schedule }: { title: string; schedule: Date| number; }): Todo {
+    return new Todo('new', title, schedule);
+  }
+  static of({id,title,schedule}: {id: string; title: string; schedule: Date| number; }): Todo {
+    return new Todo(id,title,schedule);
+  }
+  constructor(id: string,title: string,schedule: Date | number) {
     this.id = id;
     this.title = title;
-    this.schedule = schedule;
+    if(schedule instanceof Date) {
+      this.schedule = schedule;
+    }
+ else {
+      this.schedule = new Date(schedule);
+    }
   }
   id: string;
   title: string;

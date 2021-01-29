@@ -10,8 +10,9 @@ export type Scalars = {
   Int: number;
   Float: number;
   /** Date custom scalar type */
-  date: any;
+  Date: any;
 };
+
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -22,14 +23,14 @@ export type Mutation = {
 
 export type MutationAddArgs = {
   id: Scalars['ID'];
-  schedule: Scalars['date'];
+  schedule: Scalars['Date'];
   title: Scalars['String'];
 };
 
 
 export type MutationUpdateArgs = {
   id: Scalars['ID'];
-  schedule: Scalars['date'];
+  schedule: Scalars['Date'];
   title: Scalars['String'];
 };
 
@@ -41,17 +42,16 @@ export type Query = {
 
 
 export type QueryCreateArgs = {
-  schedule: Scalars['date'];
+  schedule: Scalars['Date'];
   title: Scalars['String'];
 };
 
 export type Todo = {
   __typename?: 'Todo';
   id: Scalars['ID'];
-  schedule: Scalars['date'];
+  schedule: Scalars['Date'];
   title: Scalars['String'];
 };
-
 
 export type ReadAllQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -59,6 +59,20 @@ export type ReadAllQueryVariables = Exact<{ [key: string]: never; }>;
 export type ReadAllQuery = (
   { __typename?: 'Query' }
   & { readAll: Array<(
+    { __typename?: 'Todo' }
+    & Pick<Todo, 'id' | 'title' | 'schedule'>
+  )> }
+);
+
+export type CreateQueryVariables = Exact<{
+  title: Scalars['String'];
+  schedule: Scalars['Date'];
+}>;
+
+
+export type CreateQuery = (
+  { __typename?: 'Query' }
+  & { create?: Maybe<(
     { __typename?: 'Todo' }
     & Pick<Todo, 'id' | 'title' | 'schedule'>
   )> }

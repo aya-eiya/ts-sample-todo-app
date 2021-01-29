@@ -29,6 +29,7 @@
   "devDependencies": {
     "@graphql-codegen/cli": "latest",
     "@graphql-codegen/introspection": "latest",
+    "@graphql-codegen/import-types-preset": "latest",
     "@graphql-codegen/typescript": "latest",
     "@graphql-codegen/typescript-graphql-request": "latest",
     "@graphql-codegen/typescript-operations": "latest",
