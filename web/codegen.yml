@@ -6,6 +6,8 @@ generates:
     plugins:
       - typescript
       - typescript-operations
+  src/infra/gql/requests.ts:
+    plugins:
       - typescript-graphql-request
   ./graphql.schema.json:
     plugins:

@@ -19,6 +19,7 @@
     "autoprefixer": "latest",
     "graphql": "latest",
     "graphql-request": "latest",
+    "graphql-tag": "latest",
     "next": "latest",
     "postcss": "latest",
     "react": "latest",
@@ -46,8 +47,8 @@
     "minimist": "latest",
     "stylelint": "latest",
     "stylelint-config-recommended": "latest",
-    "typescript": "latest",
     "ts-jest": "latest",
-    "ts-node-dev": "latest"
+    "ts-node-dev": "latest",
+    "typescript": "latest"
   }
 }

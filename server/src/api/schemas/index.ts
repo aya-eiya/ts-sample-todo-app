@@ -1,5 +1,5 @@
 import { Kind } from 'graphql';
-import { arg, idArg, list, objectType, queryType, scalarType, stringArg, nonNull } from 'nexus';
+import { arg, idArg, list, objectType, queryType, scalarType, stringArg, nonNull, mutationType } from 'nexus';
 import { Schedule, Todo as DomainTodo, TodoId } from '../../domains';
 import { InMemoryTodoRepository } from '../../infra/InMemoryTodoRepository';
 import { Todo as ApiTodo } from '../models';
@@ -98,6 +98,17 @@ export const Query = queryType({
       }
     });
 
+    t.field('readAll', {
+      type: nonNull(list(nonNull(TypeTodo))),
+      async resolve(_, _args) {
+        return (await repo.readAll()).map(OutputTodo.of);
+      }
+    });
+  }
+});
+
+export const Mutation = mutationType({
+  definition(t) {
     t.field('add', {
       type: nonNull(TypeTodo),
       args: updateArgs,
@@ -109,13 +120,6 @@ export const Query = queryType({
         );
         const todo = await repo.add(newTodo);
         return OutputTodo.of(todo);
-      }
-    });
-
-    t.field('readAll', {
-      type: nonNull(list(nonNull(TypeTodo))),
-      async resolve(_, _args) {
-        return (await repo.readAll()).map(OutputTodo.of);
       }
     });
 

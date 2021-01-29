@@ -1,7 +1,3 @@
-import { GraphQLClient } from 'graphql-request';
-import { HeadersInit } from 'graphql-request/dist/types.dom';
-import { print } from 'graphql';
-import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -17,30 +13,34 @@ export type Scalars = {
   date: any;
 };
 
-export type Query = {
-  __typename?: 'Query';
+export type Mutation = {
+  __typename?: 'Mutation';
   add: Todo;
-  create?: Maybe<Todo>;
-  readAll: Array<Todo>;
   update: Todo;
 };
 
 
-export type QueryAddArgs = {
+export type MutationAddArgs = {
   id: Scalars['ID'];
   schedule: Scalars['date'];
   title: Scalars['String'];
+};
+
+
+export type MutationUpdateArgs = {
+  id: Scalars['ID'];
+  schedule: Scalars['date'];
+  title: Scalars['String'];
+};
+
+export type Query = {
+  __typename?: 'Query';
+  create?: Maybe<Todo>;
+  readAll: Array<Todo>;
 };
 
 
 export type QueryCreateArgs = {
-  schedule: Scalars['date'];
-  title: Scalars['String'];
-};
-
-
-export type QueryUpdateArgs = {
-  id: Scalars['ID'];
   schedule: Scalars['date'];
   title: Scalars['String'];
 };
@@ -63,27 +63,3 @@ export type ReadAllQuery = (
     & Pick<Todo, 'id' | 'title' | 'schedule'>
   )> }
 );
-
-
-export const ReadAllDocument = gql`
-    query readAll {
-  readAll {
-    id
-    title
-    schedule
-  }
-}
-    `;
-
-export type SdkFunctionWrapper = <T>(action: () => Promise<T>) => Promise<T>;
-
-
-const defaultWrapper: SdkFunctionWrapper = sdkFunction => sdkFunction();
-export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
-  return {
-    readAll(variables?: ReadAllQueryVariables, requestHeaders?: HeadersInit): Promise<ReadAllQuery> {
-      return withWrapper(() => client.request<ReadAllQuery>(print(ReadAllDocument), variables, requestHeaders));
-    }
-  };
-}
-export type Sdk = ReturnType<typeof getSdk>;

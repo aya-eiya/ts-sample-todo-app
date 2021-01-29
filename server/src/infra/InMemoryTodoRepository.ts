@@ -1,4 +1,4 @@
-import { TodoRepository, Todo, Schedule, TodoId } from "../domains";
+import { TodoRepository, Todo, Schedule, TodoId } from '../domains';
 
 class InMemoryTodo implements Todo {
   constructor(id: TodoId, title: string, schedule: Schedule) {
@@ -30,7 +30,7 @@ export class InMemoryTodoRepository implements TodoRepository {
   }
   async create(title: string, schedule: Schedule): Promise<Todo> {
     return new InMemoryTodo(
-      new TodoId("new"),
+      new TodoId('new'),
       title,
       schedule
     );
@@ -41,7 +41,7 @@ export class InMemoryTodoRepository implements TodoRepository {
   }
 
   async add(todo: Todo): Promise<Todo> {
-    if(todo.id().value === "new") {
+    if(todo.id().value === 'new') {
       this._seq++;
       const t = new InMemoryTodo(
         new TodoId(`${this._seq}`),
@@ -55,7 +55,7 @@ export class InMemoryTodoRepository implements TodoRepository {
   }
 
   async update(todo: Todo): Promise<Todo> {
-    if(todo.id().value !== "new" && await this.delete(todo)) {
+    if(todo.id().value !== 'new' && await this.delete(todo)) {
       const t = new InMemoryTodo(
         todo.id(),
         todo.title,

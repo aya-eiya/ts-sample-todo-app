@@ -1,11 +1,10 @@
 import { Todo } from '../../../domain/models/todo';
 import { TodoRepository } from '../../../domain/repositories/todoRepository';
 import { GraphQLClient } from 'graphql-request';
-import { getSdk } from '../types';
+import { getSdk } from '../requests';
 
 // TODO to build-time option
 const endpoint = 'http://localhost:4000/graphql';
-
 
 export class GqlTodoRepository implements TodoRepository {
   private constructor(){
@@ -23,13 +22,15 @@ export class GqlTodoRepository implements TodoRepository {
   }
 
   async readAll(): Promise<Todo[]> {
-    const qry = await getSdk(this.client).readAll();
+    const sdk = getSdk(this.client);
+    const qry = await sdk.readAll();
     const res = qry.readAll.map(t=>
       new Todo(t.id, t.title, t.schedule)
     );
     return res;
   }
-  async create(): Promise<Todo> {
+
+  async create(todo: Todo): Promise<Todo> {
     throw new Error('Method not implemented.');
   }
   add(todo: Todo): Promise<Todo> {
