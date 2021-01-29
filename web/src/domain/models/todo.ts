@@ -8,12 +8,8 @@ export class Todo {
   constructor(id: string,title: string,schedule: Date | number) {
     this.id = id;
     this.title = title;
-    if(schedule instanceof Date) {
-      this.schedule = schedule;
-    }
- else {
-      this.schedule = new Date(schedule);
-    }
+    if(schedule instanceof Date) { this.schedule = schedule; }
+    else { this.schedule = new Date(schedule); }
   }
   id: string;
   title: string;
