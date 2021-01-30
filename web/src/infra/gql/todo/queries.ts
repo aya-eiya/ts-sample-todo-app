@@ -28,3 +28,19 @@ mutation add($id: ID!, $title: String!, $schedule: Date!) {
   }
 }
 `;
+
+export const update = gql`
+mutation update($id: ID!, $title: String!, $schedule: Date!) {
+  update(id: $id, title: $title, schedule: $schedule) {
+    id
+    title
+    schedule
+  }
+}
+`;
+
+export const remove = gql`
+mutation remove($id: ID!) {
+  remove(id: $id)
+}
+`;

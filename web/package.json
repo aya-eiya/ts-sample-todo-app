@@ -24,7 +24,8 @@
     "postcss": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "tailwindcss": "latest"
+    "tailwindcss": "latest",
+    "unstated-next": "latest"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "latest",

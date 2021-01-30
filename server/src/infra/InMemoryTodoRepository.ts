@@ -55,7 +55,7 @@ export class InMemoryTodoRepository implements TodoRepository {
   }
 
   async update(todo: Todo): Promise<Todo> {
-    if(todo.id().value !== 'new' && await this.delete(todo)) {
+    if(todo.id().value !== 'new' && await this.remove(todo.id())) {
       const t = new InMemoryTodo(
         todo.id(),
         todo.title,
@@ -67,10 +67,10 @@ export class InMemoryTodoRepository implements TodoRepository {
     return todo;
   }
 
-  async delete(todo: Todo): Promise<boolean> {
-    const i = this._store.findIndex((t)=>t.id().value === todo.id().value);
+  async remove(todoId: TodoId): Promise<boolean> {
+    const i = this._store.findIndex((t)=>t.id().value === todoId.value);
     if(i > -1) {
-      this._store = this._store.filter((t)=>t.id().value !== todo.id().value);
+      this._store = this._store.filter((t)=>t.id().value !== todoId.value);
       return true;
     }
     return false;

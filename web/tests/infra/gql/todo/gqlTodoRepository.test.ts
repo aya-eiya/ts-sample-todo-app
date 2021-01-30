@@ -31,6 +31,7 @@ const testScenario = {
   create: false,
   add: false,
   readAllAfterAdd: false,
+  remove: false,
 };
 
 const dateOf = {
@@ -39,10 +40,18 @@ const dateOf = {
   '2021-12-01T08:46:19+0900': new Date(1638315979000),
 }
 
+beforeAll(async (done) => {
+  const repo: TodoRepository = GqlTodoRepository.getInstance();
+  await Promise.all((await repo.readAll()).map(
+    (t) => repo.remove(t.id)
+  ));
+  testScenario.init = true;
+  done();
+});
+
 test('initialized instance is not null or undefined', () => {
   const repo: TodoRepository = GqlTodoRepository.getInstance();
   expect(repo).toBeTruthy();
-  testScenario.init = true;
 });
 
 test('readAll() gets empty array', async () => {
@@ -82,7 +91,7 @@ test('add() gets added item with new id', async () => {
   if(todo) {
     const added = await repo.add(todo);
     if(added) {
-      expect(added.id).toEqual('1');
+      expect(added.id).not.toEqual('new');
       expect(added.title).toEqual(title);
       expect(added.schedule).toEqual(schedule);
     }else{
@@ -94,7 +103,7 @@ test('add() gets added item with new id', async () => {
   testScenario.add = true;
 });
 
-test('readAll() after add() ones gets added item', async () => {
+test('readAll() after add() once gets added item', async () => {
   await until(() => testScenario.add);
   const repo: TodoRepository = GqlTodoRepository.getInstance();
   const todos: Todo[] = await repo.readAll();
@@ -102,8 +111,17 @@ test('readAll() after add() ones gets added item', async () => {
   const title = 'my todo';
   const schedule = dateOf['2021-04-01T01:55:10+0900'];
   const todo = todos[0];
-  expect(todo.id).toEqual('1');
   expect(todo.title).toEqual(title);
   expect(todo.schedule).toEqual(schedule);
   testScenario.readAllAfterAdd = true;
+});
+
+test('remove() first id gets true', async () => {
+  await until(() => testScenario.readAllAfterAdd);
+  const repo: TodoRepository = GqlTodoRepository.getInstance();
+  const todos: Todo[] = await repo.readAll();
+  const todo = todos[0];
+  const res = await repo.remove(todo.id);
+  expect(res).toBe(true);
+  testScenario.remove = true;
 });

@@ -1,7 +1,6 @@
 import { Kind } from 'graphql';
-import { arg, idArg, list, objectType, queryType, scalarType, stringArg, nonNull, mutationType } from 'nexus';
+import { arg, idArg, list, objectType, queryType, scalarType, stringArg, nonNull, mutationType, booleanArg } from 'nexus';
 import { Schedule, Todo as DomainTodo, TodoId } from '../../domains';
-import { InMemoryTodoRepository } from '../../infra/InMemoryTodoRepository';
 import { Todo as ApiTodo } from '../models';
 
 
@@ -58,6 +57,9 @@ class UpdateSchedule implements Schedule {
   }
   date: Date;
 }
+const removeArgs = {
+  id: nonNull(idArg()),
+};
 
 class UpdateTodo implements DomainTodo {
   constructor(id: TodoId, title: string, scheduledDate: Date) {
@@ -135,11 +137,20 @@ export const Mutation = mutationType({
       async resolve(_,{id, title , schedule}, { dataSources }) {
         const repo = dataSources.todoRepository;
         const todo = await repo.update(new UpdateTodo(
-          new TodoId(id || 'new'),
+          new TodoId(id),
           title,
           schedule
         ));
         return OutputTodo.of(todo);
+      }
+    });
+
+    t.field('remove', {
+      type: 'Boolean',
+      args: removeArgs,
+      async resolve(_,{ id }, { dataSources }) {
+        const repo = dataSources.todoRepository;
+        return repo.remove(new TodoId(id));
       }
     });
   }

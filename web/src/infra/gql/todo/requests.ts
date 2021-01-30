@@ -2,7 +2,7 @@ import type { GraphQLClient } from 'graphql-request';
 import type { Headers as HeadersInit } from 'graphql-request/dist/types.dom';
 import { print } from 'graphql';
 import gql from 'graphql-tag';
-import { CreateQuery, CreateQueryVariables, ReadAllQuery, ReadAllQueryVariables,AddMutationVariables, AddMutation } from '../types';
+import { AddMutation, AddMutationVariables, CreateQuery, CreateQueryVariables, ReadAllQuery, ReadAllQueryVariables, RemoveMutation, RemoveMutationVariables, UpdateMutation, UpdateMutationVariables } from '../types';
 
 export const ReadAllDocument = gql`
     query readAll {
@@ -31,6 +31,20 @@ export const AddDocument = gql`
   }
 }
     `;
+export const UpdateDocument = gql`
+    mutation update($id: ID!, $title: String!, $schedule: Date!) {
+  update(id: $id, title: $title, schedule: $schedule) {
+    id
+    title
+    schedule
+  }
+}
+    `;
+export const RemoveDocument = gql`
+    mutation remove($id: ID!) {
+  remove(id: $id)
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: () => Promise<T>) => Promise<T>;
 
@@ -46,6 +60,12 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     add(variables: AddMutationVariables, requestHeaders?: HeadersInit): Promise<AddMutation> {
       return withWrapper(() => client.request<AddMutation>(print(AddDocument), variables, requestHeaders));
+    },
+    update(variables: UpdateMutationVariables, requestHeaders?: HeadersInit): Promise<UpdateMutation> {
+      return withWrapper(() => client.request<UpdateMutation>(print(UpdateDocument), variables, requestHeaders));
+    },
+    remove(variables: RemoveMutationVariables, requestHeaders?: HeadersInit): Promise<RemoveMutation> {
+      return withWrapper(() => client.request<RemoveMutation>(print(RemoveDocument), variables, requestHeaders));
     }
   };
 }

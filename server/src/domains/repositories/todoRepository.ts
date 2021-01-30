@@ -1,4 +1,4 @@
-import { Todo } from '../models/todo';
+import { Todo,TodoId } from '../models/todo';
 import { Schedule } from '../models/schedule';
 
 export interface TodoRepository {
@@ -6,5 +6,5 @@ export interface TodoRepository {
   readAll(): Promise<Todo[]>
   add(todo: Todo): Promise<Todo>
   update(todo: Todo): Promise<Todo>
-  delete(todo: Todo): Promise<boolean>
+  remove(todoId: TodoId): Promise<boolean>
 }

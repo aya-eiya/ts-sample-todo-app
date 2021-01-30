@@ -17,6 +17,7 @@ export type Scalars = {
 export type Mutation = {
   __typename?: 'Mutation';
   add: Todo;
+  remove?: Maybe<Scalars['Boolean']>;
   update: Todo;
 };
 
@@ -25,6 +26,11 @@ export type MutationAddArgs = {
   id: Scalars['ID'];
   schedule: Scalars['Date'];
   title: Scalars['String'];
+};
+
+
+export type MutationRemoveArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -91,4 +97,29 @@ export type AddMutation = (
     { __typename?: 'Todo' }
     & Pick<Todo, 'id' | 'title' | 'schedule'>
   ) }
+);
+
+export type UpdateMutationVariables = Exact<{
+  id: Scalars['ID'];
+  title: Scalars['String'];
+  schedule: Scalars['Date'];
+}>;
+
+
+export type UpdateMutation = (
+  { __typename?: 'Mutation' }
+  & { update: (
+    { __typename?: 'Todo' }
+    & Pick<Todo, 'id' | 'title' | 'schedule'>
+  ) }
+);
+
+export type RemoveMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type RemoveMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'remove'>
 );
