@@ -18,3 +18,13 @@ query create($title: String!, $schedule: Date!) {
   }
 }
 `;
+
+export const add = gql`
+mutation add($id: ID!, $title: String!, $schedule: Date!) {
+  add(id: $id, title: $title, schedule: $schedule) {
+    id
+    title
+    schedule
+  }
+}
+`;

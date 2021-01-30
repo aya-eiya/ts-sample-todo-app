@@ -2,13 +2,18 @@ import { Todo } from '../../../domain/models/todo';
 import { TodoRepository } from '../../../domain/repositories/todoRepository';
 import { GraphQLClient } from 'graphql-request';
 import { getSdk } from './requests';
-
-// TODO to build-time option
-const endpoint = 'http://localhost:4000/graphql';
+import { env as appEnv } from '../../../app/env';
 
 export class GqlTodoRepository implements TodoRepository {
-  private constructor(){
-    this.client = new GraphQLClient(endpoint);
+  private constructor(env: {
+    endpoint: string | URL
+  }){
+    if(env.endpoint instanceof URL) {
+      this.client = new GraphQLClient(env.endpoint.toString());
+    }
+else {
+      this.client = new GraphQLClient(env.endpoint);
+    }
   }
 
   private client: GraphQLClient;
@@ -16,7 +21,7 @@ export class GqlTodoRepository implements TodoRepository {
   private static instance: TodoRepository;
   static getInstance(): TodoRepository {
     if(!this.instance) {
-      this.instance = new GqlTodoRepository();
+      this.instance = new GqlTodoRepository(appEnv);
     }
     return this.instance;
   }
@@ -34,8 +39,12 @@ export class GqlTodoRepository implements TodoRepository {
     }
     return undefined;
   }
-  add(todo: Todo): Promise<Todo| undefined> {
-    throw new Error('Method not implemented.');
+  async add(todo: Todo): Promise<Todo| undefined> {
+    const t = (await getSdk(this.client).add({...todo})).add;
+    if(t) {
+      return Todo.of({...t});
+    }
+    return undefined;
   }
   update(todo: Todo): Promise<Todo| undefined> {
     throw new Error('Method not implemented.');

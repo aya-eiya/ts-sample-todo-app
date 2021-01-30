@@ -77,3 +77,18 @@ export type CreateQuery = (
     & Pick<Todo, 'id' | 'title' | 'schedule'>
   )> }
 );
+
+export type AddMutationVariables = Exact<{
+  id: Scalars['ID'];
+  title: Scalars['String'];
+  schedule: Scalars['Date'];
+}>;
+
+
+export type AddMutation = (
+  { __typename?: 'Mutation' }
+  & { add: (
+    { __typename?: 'Todo' }
+    & Pick<Todo, 'id' | 'title' | 'schedule'>
+  ) }
+);
