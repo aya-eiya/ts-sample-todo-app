@@ -4,8 +4,6 @@ import { Schedule, Todo as DomainTodo, TodoId } from '../../domains';
 import { InMemoryTodoRepository } from '../../infra/InMemoryTodoRepository';
 import { Todo as ApiTodo } from '../models';
 
-// TODO: use DI
-const repo = InMemoryTodoRepository.getInstance();
 
 const date = scalarType({
   name: 'Date',
@@ -94,7 +92,8 @@ export const Query = queryType({
     t.field('create', {
       type: TypeTodo,
       args: createArgs,
-      async resolve(_,{title , schedule}){
+      async resolve(_source, {title , schedule}, { dataSources }){
+        const repo = dataSources.todoRepository;
         const todo = await repo.create(
           title || 'todo',
           new UpdateSchedule(schedule)
@@ -105,7 +104,8 @@ export const Query = queryType({
 
     t.field('readAll', {
       type: nonNull(list(nonNull(TypeTodo))),
-      async resolve(_, _args) {
+      async resolve(_source, _args, { dataSources }) {
+        const repo = dataSources.todoRepository;
         return (await repo.readAll()).map(OutputTodo.of);
       }
     });
@@ -117,7 +117,8 @@ export const Mutation = mutationType({
     t.field('add', {
       type: nonNull(TypeTodo),
       args: updateArgs,
-      async resolve(_,{id, title, schedule}){
+      async resolve(_,{id, title, schedule}, { dataSources }) {
+        const repo = dataSources.todoRepository;
         const newTodo = new UpdateTodo(
           id ? new TodoId(id) : new TodoId('new'),
           title || 'todo',
@@ -131,7 +132,8 @@ export const Mutation = mutationType({
     t.field('update', {
       type: nonNull(TypeTodo),
       args: updateArgs,
-      async resolve(_,{id, title , schedule}) {
+      async resolve(_,{id, title , schedule}, { dataSources }) {
+        const repo = dataSources.todoRepository;
         const todo = await repo.update(new UpdateTodo(
           new TodoId(id || 'new'),
           title,

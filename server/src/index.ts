@@ -2,6 +2,8 @@ import { makeSchema } from 'nexus';
 import { ApolloServer } from 'apollo-server';
 import path from 'path';
 import * as Query from './api';
+import { InMemoryTodoRepository } from './infra/InMemoryTodoRepository';
+import { toDataSource } from './api/utils';
 
 const schema = makeSchema({
   types: Query,
@@ -13,6 +15,9 @@ const schema = makeSchema({
 
 const server = new ApolloServer({
   schema,
+  dataSources: () => ({
+    todoRepository: toDataSource(InMemoryTodoRepository.getInstance())
+  }),
 });
 
 const port = process.env.PORT || 4000;
