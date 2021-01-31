@@ -97,7 +97,7 @@ class TodoInput extends React.Component<TodoInputProp,TodoInputState> {
   }
 
   render(): React.ReactNode {
-    return <form className="grid grid-cols-4">
+    return <form className="grid grid-cols-5 gap-x-1">
       <div className="m-1 h-8 p-1 content-center">
         <label htmlFor="title">Title</label>
       </div>
@@ -107,6 +107,12 @@ class TodoInput extends React.Component<TodoInputProp,TodoInputState> {
           value={this.state.editTodo.title}
           onChange={this.onTitleChange}
         />
+      </div>
+      <div className="row-span-2 flex p-1 justify-end items-end">
+          <button
+            className="rounded p-1 w-20 h-8 bg-blue-200"
+            type="button"
+            onClick={() => this.onSubmit(this.state.todo)}>add</button>
       </div>
       <div className="m-1 h-8 p-1 content-center">
         <label htmlFor="schedule">Schedule</label>
@@ -118,14 +124,6 @@ class TodoInput extends React.Component<TodoInputProp,TodoInputState> {
           onChange={this.onScheduleChange}
         />
       </div>
-      <p className="col-span-4 flex justify-end">
-        <div>
-          <button
-            className="rounded p-1 w-20 bg-blue-200"
-            type="button"
-            onClick={() => this.onSubmit(this.state.todo)}>add</button>
-        </div>
-      </p>
     </form>;
   }
 }
@@ -188,28 +186,28 @@ class TodoListItem extends React.Component<TodoListItemProp,TodoListItemState> {
   render(): React.ReactNode {
     const { item, editItem, isEditMode } = this.state;
     return (!isEditMode) ?
-    <li className="flex flex-row m-1 items-center" id={`todoItem_${item.id}`}>
-      <div className="p-1">{item.title}</div>
-      <div className="p-1">{item.schedule.toUTCString()}</div>
-      <div className="p-1">
+    <li className="flex flex-1 flex-row m-1 items-center" id={`todoItem_${item.id}`}>
+      <div className="p-1 h-10 w-36">{item.title}</div>
+      <div className="p-1 h-10 w-72">{item.schedule.toUTCString()}</div>
+      <div className="p-1 h-10">
         <button
-        className="rounded p-1 w-16 bg-gray-400"
+        className="rounded p-1 w-16 bg-red-400"
         type="button"
         onClick={()=>this.onRemove(item)}>remove</button>
       </div>
-      <div className="p-1">
+      <div className="p-1 h-10">
         <button
-        className="rounded p-1 w-16 bg-gray-400"
+        className="rounded p-1 w-16 bg-blue-400"
         type="button"
         onClick={()=>this.setState({isEditMode: true})}>edit</button>
       </div>
     </li> :
-    <li className="flex flex-row m-1 items-center" id={`todoItem_${item.id}`}>
-      <div className="p-1"><input type="text" name="title" value={editItem.title} onChange={this.onTitleChange} /></div>
-      <div className="p-1"><input type="text" name="schedule" value={editItem.schedule} onChange={this.onScheduleChange} /></div>
-      <div className="p-1">
+    <li className="flex flex-1 flex-row m-1 items-center" id={`todoItem_${item.id}`}>
+      <div className="p-1 h-10 w-36"><input className="w-full bg-gray-200 rounded focus:outline-none focus:ring focus:border-blue-300 m-1 h-8 p-1 pl-2" type="text" name="title" value={editItem.title} onChange={this.onTitleChange} /></div>
+      <div className="p-1 h-10 w-72"><input className="w-full bg-gray-200 rounded focus:outline-none focus:ring focus:border-blue-300 m-1 h-8 p-1 pl-2" type="text" name="schedule" value={editItem.schedule} onChange={this.onScheduleChange} /></div>
+      <div className="p-1 h-10">
         <button
-        className="rounded p-1 w-16 bg-gray-400"
+        className="rounded p-1 w-16 bg-blue-400"
         type="button"
         onClick={()=> {
           const todo = item.copyWith({...editItem});
@@ -219,16 +217,16 @@ class TodoListItem extends React.Component<TodoListItemProp,TodoListItemState> {
           }
           this.setState({isEditMode: false});
         }}>update</button>
-        <div className="p-1">
-          <button
-          className="rounded p-1 w-16 bg-gray-400"
-          type="button"
-          onClick={()=>this.setState({
-            editItem: {
-              title: item.title,
-              schedule: item.schedule.toUTCString(),
-            },isEditMode: false})}>cancel</button>
-        </div>
+      </div>
+      <div className="p-1 h-10">
+        <button
+        className="rounded p-1 w-16 bg-gray-300"
+        type="button"
+        onClick={()=>this.setState({
+          editItem: {
+            title: item.title,
+            schedule: item.schedule.toUTCString(),
+          },isEditMode: false})}>cancel</button>
       </div>
     </li>;
   }
@@ -241,11 +239,11 @@ function TodoList(): JSX.Element {
     <TodoListItem item={item} onSubmit={(todo)=>repo.update(todo)} onRemove={(todo) => repo.remove(todo.id)} />
   );
   return <div className="flex flex-col h-screen">
-    <div className="flex-2">
+    <div className="flex-2 w-auto">
       <TodoInput onSubmit={(todo)=>{todos.addTodo(todo);}} />
     </div>
-    <div className="flex-8">
-      <ul className="">
+    <div className="flex-8 h-96 w-auto overflow-y-scroll">
+      <ul className="fex">
         { todoList }
       </ul>
     </div>
