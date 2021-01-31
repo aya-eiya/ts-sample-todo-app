@@ -1,246 +1,34 @@
 import Head from 'next/head';
-import React, { useState } from 'react';
-import { createContainer } from 'unstated-next';
-import { Todo } from '../domain/models/todo';
-import { GqlTodoRepository } from '#/infra/gql';
+import React, { useEffect } from 'react';
+import { Todo } from '#/domain/models/todo';
+import { useSelector, ReactReduxContext } from 'react-redux';
+import { createDispatch, RootState, todoRepoAdd, todoRepoCreate, todoRepoReadAll, todoRepoRemove, todoRepoUpdate  } from './stores';
 
-const repo = GqlTodoRepository.getInstance();
-function useCounter(initialState: Todo[] = []) {
-  const [todos, setState] = useState(initialState);
-  const readAll = async () => setState(await repo.readAll());
-  const addTodo = async (todo: Todo) => {
-    const newTodo = await repo.add(todo);
-    if(newTodo) {
-      readAll();
-    }
-  };
-  const removeTodo = async (todo: Todo) => {
-    const removed = await repo.remove(todo.id);
-    if(removed) {
-      readAll();
-    }
-  };
-  return { todos, readAll, addTodo, removeTodo };
-}
-const Todos = createContainer(useCounter);
-interface TodoInputProp {
-  onSubmit: (todo: Todo) => void;
-}
-interface TodoInputState {
-  todo: Todo,
-  editTodo: {
-    title: string,
-    schedule: string
-  }
-}
+import TodoListItem from '#/view/components/todoListItem';
+import TodoInput from '#/view/components/todoInput';
 
-class TodoInput extends React.Component<TodoInputProp,TodoInputState> {
-  constructor(props: TodoInputProp) {
-    super(props);
-    this.state = {
-      todo:Todo.newItem({title:'',schedule:new Date()}),
-      editTodo: {
-        title: '',
-        schedule: ''
-      }
-    };
-    this.onSubmit = props.onSubmit.bind(this);
-    this.onTitleChange = this.onTitleChange.bind(this);
-    this.onScheduleChange = this.onScheduleChange.bind(this);
-    repo.create(Todo.newItem({
-      title:'new item',
-      schedule: new Date()
-    })).then((todo) => {
-        if(todo) {
-          this.setState({
-            todo,
-            editTodo: {
-              title: todo.title,
-              schedule: todo.schedule.toUTCString()
-            }
-         });
-        }
-      }
-    );
-  }
-
-  onSubmit: (todo: Todo) => void;
-
-  onTitleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const title = event.target.value;
-    this.setState({
-      editTodo: {
-        title,
-        schedule: this.state.editTodo.schedule,
-      },
-      todo: Todo.newItem({ title , schedule:this.state.todo.schedule}),
-    });
-  }
-
-  onScheduleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const { value } = event.target;
-    this.setState({
-      editTodo: {
-        title: this.state.editTodo.title,
-        schedule: value
-      }
-    });
-    try {
-      const schedule = new Date(value);
-      this.setState({
-        todo: Todo.newItem({title: this.state.editTodo.title, schedule }),
-      });
-    }
-    catch(e) {
-      console.log(e);
-    }
-  }
-
-  render(): React.ReactNode {
-    return <form className="grid grid-cols-5 gap-x-1">
-      <div className="m-1 h-8 p-1 content-center">
-        <label htmlFor="title">Title</label>
-      </div>
-      <div className="col-span-3">
-        <input type="text" name="title"
-          className=" bg-gray-200 w-full rounded focus:outline-none focus:ring focus:border-blue-300 m-1 h-8 p-1 pl-2"
-          value={this.state.editTodo.title}
-          onChange={this.onTitleChange}
-        />
-      </div>
-      <div className="row-span-2 flex p-1 justify-end items-end">
-          <button
-            className="rounded p-1 w-20 h-8 bg-blue-200"
-            type="button"
-            onClick={() => this.onSubmit(this.state.todo)}>add</button>
-      </div>
-      <div className="m-1 h-8 p-1 content-center">
-        <label htmlFor="schedule">Schedule</label>
-      </div>
-      <div className="col-span-3">
-        <input type="text" name="schedule"
-          className=" bg-gray-200 w-full rounded focus:outline-none focus:ring focus:border-blue-300 m-1 h-8 p-1 pl-2"
-          value={this.state.editTodo.schedule}
-          onChange={this.onScheduleChange}
-        />
-      </div>
-    </form>;
-  }
-}
-
-interface TodoListItemProp {
-  item: Todo;
-  onSubmit: (todo: Todo) => void;
-  onRemove: (todo: Todo) => void;
-}
-
-interface TodoListItemState {
-  item: Todo;
-  isEditMode: boolean;
-  editItem: {
-    title: string;
-    schedule: string;
-  }
-}
-
-class TodoListItem extends React.Component<TodoListItemProp,TodoListItemState> {
-  constructor(props: TodoListItemProp) {
-    super(props);
-    this.onSubmit = props.onSubmit.bind(this);
-    this.onRemove = props.onRemove.bind(this);
-    this.onTitleChange = this.onTitleChange.bind(this);
-    this.onScheduleChange = this.onScheduleChange.bind(this);
-    this.state = {
-      item: props.item,
-      isEditMode: false,
-      editItem: {
-        title: props.item.title,
-        schedule: props.item.schedule.toUTCString(),
-      }
-    };
-  }
-
-  onSubmit: (todo: Todo) => void;
-  onRemove: (todo: Todo) => void;
-
-  onTitleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const title = event.target.value;
-    this.setState({
-      editItem: {
-        title,
-        schedule: this.state.editItem.schedule,
-      },
-    });
-  }
-
-  onScheduleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const { value } = event.target;
-    this.setState({
-      editItem: {
-        title: this.state.editItem.title,
-        schedule: value
-      }
-    });
-  }
-
-  render(): React.ReactNode {
-    const { item, editItem, isEditMode } = this.state;
-    return (!isEditMode) ?
-    <li className="flex flex-1 flex-row m-1 items-center" id={`todoItem_${item.id}`}>
-      <div className="p-1 h-10 w-36">{item.title}</div>
-      <div className="p-1 h-10 w-72">{item.schedule.toUTCString()}</div>
-      <div className="p-1 h-10">
-        <button
-        className="rounded p-1 w-16 bg-red-400"
-        type="button"
-        onClick={()=>this.onRemove(item)}>remove</button>
-      </div>
-      <div className="p-1 h-10">
-        <button
-        className="rounded p-1 w-16 bg-blue-400"
-        type="button"
-        onClick={()=>this.setState({isEditMode: true})}>edit</button>
-      </div>
-    </li> :
-    <li className="flex flex-1 flex-row m-1 items-center" id={`todoItem_${item.id}`}>
-      <div className="p-1 h-10 w-36"><input className="w-full bg-gray-200 rounded focus:outline-none focus:ring focus:border-blue-300 m-1 h-8 p-1 pl-2" type="text" name="title" value={editItem.title} onChange={this.onTitleChange} /></div>
-      <div className="p-1 h-10 w-72"><input className="w-full bg-gray-200 rounded focus:outline-none focus:ring focus:border-blue-300 m-1 h-8 p-1 pl-2" type="text" name="schedule" value={editItem.schedule} onChange={this.onScheduleChange} /></div>
-      <div className="p-1 h-10">
-        <button
-        className="rounded p-1 w-16 bg-blue-400"
-        type="button"
-        onClick={()=> {
-          const todo = item.copyWith({...editItem});
-          if(todo !== item) {
-            this.onSubmit(todo);
-            this.setState({item: todo});
-          }
-          this.setState({isEditMode: false});
-        }}>update</button>
-      </div>
-      <div className="p-1 h-10">
-        <button
-        className="rounded p-1 w-16 bg-gray-300"
-        type="button"
-        onClick={()=>this.setState({
-          editItem: {
-            title: item.title,
-            schedule: item.schedule.toUTCString(),
-          },isEditMode: false})}>cancel</button>
-      </div>
-    </li>;
-  }
-}
 
 function TodoList(): JSX.Element {
-  const todos = Todos.useContainer();
-  todos.readAll();
-  const todoList = todos.todos.map(item=>
-    <TodoListItem item={item} onSubmit={(todo)=>repo.update(todo)} onRemove={(todo) => repo.remove(todo.id)} />
+  const { todo } = useSelector((state: RootState) => state);
+  const { todos, newItem } = todo;
+  const dispatch = createDispatch();
+  const defaultNewItem = Todo.newItem({
+    title: 'new item',
+    schedule: new Date()
+  });
+  dispatch(todoRepoReadAll());
+  dispatch(todoRepoCreate(defaultNewItem));
+
+  const todoList = todos.map((item: Todo) =>
+    <TodoListItem
+      item={item}
+      onSubmit={(todo) => dispatch(todoRepoUpdate(todo))}
+      onRemove={(todo) => dispatch(todoRepoRemove(todo))}
+    />
   );
   return <div className="flex flex-col h-screen">
     <div className="flex-2 w-auto">
-      <TodoInput onSubmit={(todo)=>{todos.addTodo(todo);}} />
+      <TodoInput onSubmit={(todo)=>dispatch(todoRepoAdd(todo))} newItem={newItem} />
     </div>
     <div className="flex-8 h-96 w-auto overflow-y-scroll">
       <ul className="fex">
@@ -249,7 +37,6 @@ function TodoList(): JSX.Element {
     </div>
   </div>;
 }
-
 
 export default function Home(): JSX.Element {
   return (
@@ -264,11 +51,8 @@ export default function Home(): JSX.Element {
         <h1 className="text-xl">
           TypeScript Next app example
         </h1>
-        <Todos.Provider>
           <TodoList />
-        </Todos.Provider>
       </main>
-
     </div>
   );
 }
