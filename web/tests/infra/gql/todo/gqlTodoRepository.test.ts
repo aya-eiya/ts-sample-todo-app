@@ -2,6 +2,10 @@ import { GqlTodoRepository } from '#/infra/gql/todo/gqlTodoRepository';
 import { TodoRepository } from '#/domain/repositories/todoRepository';
 import { Todo } from '#/domain/models/todo';
 
+// GraphQL Server との E2E テストです
+// テスト間には依存性があり、失敗時に失敗したテストケースだけを
+// 再実行できるることを保証しません
+
 async function until(f:()=> boolean): Promise<void> {
   const timeout = 5000;
   let timeoutId: ReturnType<typeof setTimeout>;

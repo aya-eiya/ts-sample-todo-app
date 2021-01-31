@@ -1,8 +1,7 @@
 import Head from 'next/head';
 import React, { useState } from 'react';
 import { createContainer } from 'unstated-next';
-import { render } from 'react-dom';
-import { Todo } from '#/domain/models/todo';
+import { Todo } from '../domain/models/todo';
 import { GqlTodoRepository } from '#/infra/gql';
 
 const repo = GqlTodoRepository.getInstance();

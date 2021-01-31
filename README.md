@@ -3,7 +3,18 @@
 - GraphQL Server with Apollo/Nexus
 - Client design tailwind
 
-## start server
+## run with docker
+
+```
+docker-compose build
+docker-compose up
+```
+
+then access http://localhost:3000
+
+## run with local server
+
+### start server
 
 ```bash
 cd server
@@ -11,7 +22,7 @@ npm install
 npm run start
 ```
 
-## start web
+### start web
 
 ```bash
 cd web
