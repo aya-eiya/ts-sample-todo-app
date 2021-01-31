@@ -15,7 +15,18 @@ export class Todo {
   title: string;
   schedule: Date;
 
-  copyWith({title, schedule}: { title: string; schedule: Date; }): Todo {
-    return new Todo(this.id,title,schedule);
+  copyWith({title, schedule}: { title: string; schedule: Date | string; }): Todo {
+    if(schedule instanceof Date) {
+      return new Todo(this.id,title,schedule);
+    }
+    else {
+      try {
+        const _schedule = new Date(schedule);
+        return new Todo(this.id,title, _schedule);
+      }
+      catch {
+        return new Todo(this.id,title, this.schedule);
+      }
+    }
   }
 }
