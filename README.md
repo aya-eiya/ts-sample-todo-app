@@ -3,6 +3,8 @@
 - GraphQL Server with Apollo/Nexus
 - Client design tailwind
 
+*) All dependencies uses "latest" version in this sample app. It's to detect incompatibilities or bugs in "latest" version.
+
 ## run with docker
 
 ```
