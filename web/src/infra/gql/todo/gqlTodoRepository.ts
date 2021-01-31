@@ -47,7 +47,11 @@ else {
     return undefined;
   }
   async update(todo: Todo): Promise<Todo| undefined> {
-    throw new Error('Method not implemented.');
+    const t = (await getSdk(this.client).update({...todo})).update;
+    if(t) {
+      return Todo.of({...t});
+    }
+    return undefined;
   }
   async remove(todoId: string): Promise<boolean> {
     const t = (await getSdk(this.client).remove({id: todoId})).remove;

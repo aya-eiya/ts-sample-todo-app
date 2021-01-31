@@ -31,6 +31,7 @@ const testScenario = {
   create: false,
   add: false,
   readAllAfterAdd: false,
+  update: false,
   remove: false,
 };
 
@@ -116,8 +117,25 @@ test('readAll() after add() once gets added item', async () => {
   testScenario.readAllAfterAdd = true;
 });
 
+test('update() the added item', async () => {
+  await until(() => testScenario.add);
+  const repo: TodoRepository = GqlTodoRepository.getInstance();
+  const todos: Todo[] = await repo.readAll();
+  const title = 'updated';
+  const schedule = dateOf['2021-12-01T08:46:19+0900'];
+  const todo = todos[0];
+  const updateTodo = todo.copyWith({title , schedule});
+  const updatedTodo = await repo.update(updateTodo);
+  if(updatedTodo) {
+    expect(updatedTodo.id).toEqual(updateTodo.id);
+    expect(updatedTodo.title).toEqual(updateTodo.title);
+    expect(updatedTodo.schedule).toEqual(updateTodo.schedule);
+  }
+  testScenario.update = true;
+});
+
 test('remove() first id gets true', async () => {
-  await until(() => testScenario.readAllAfterAdd);
+  await until(() => testScenario.update);
   const repo: TodoRepository = GqlTodoRepository.getInstance();
   const todos: Todo[] = await repo.readAll();
   const todo = todos[0];

@@ -14,4 +14,8 @@ export class Todo {
   id: string;
   title: string;
   schedule: Date;
+
+  copyWith({title, schedule}: { title: string; schedule: Date; }): Todo {
+    return new Todo(this.id,title,schedule);
+  }
 }
