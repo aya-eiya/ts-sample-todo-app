@@ -1,29 +1,27 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "lib": ["es2015", "dom"],
-    "strict": true,
-    "skipLibCheck": true,
-    "sourceMap": true,
+    "target": "es5",
+    "module": "esnext",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "rootDir": "src",
+    "outDir": "dist",
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "rootDirs": ["."],
     "jsx": "preserve",
-    "baseUrl": "./src/",
+    "baseUrl": ".",
     "paths": {
-      "#/*": ["*"]
-    }
+      "#/*": ["./src/*"]
+    },
+    "composite": true
   },
-  "exclude": ["node_modules"],
-  // "exclude": ["node_modules", "**/*.test.ts" , "**/*.spec.ts"],
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "tests"]
 }

@@ -1,10 +1,10 @@
-import { Schedule } from './schedule';
+import { Schedule } from './schedule'
 
 export class TodoId {
   constructor(value: string) {
-    this.value = value;
+    this.value = value
   }
-  value: string;
+  value: string
 }
 
 export interface Todo {

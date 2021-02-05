@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VARIANT: 14
+    volumes:
+      - ..:/workspace:delegated
+      - node_modules:/workspace/node_modules
+    command: sleep infinity
+  db:
+    image: postgres:11.8
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+volumes:
+  node_modules:
+  pg-data:

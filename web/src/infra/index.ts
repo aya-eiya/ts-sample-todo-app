@@ -1,1 +1,1 @@
-export * as gql from './gql/todo/gqlTodoRepository';
+export * as gql from './gql/todo/gqlTodoRepository'
