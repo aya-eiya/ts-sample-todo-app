@@ -87,6 +87,7 @@ export default class TodoInput extends React.Component<
           <button
             className="rounded p-1 w-20 h-8 bg-blue-200"
             type="button"
+            name="add"
             onClick={() => {
               if (this.state.todo) {
                 this.onSubmit(this.state.todo)

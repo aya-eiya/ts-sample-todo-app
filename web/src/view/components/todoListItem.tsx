@@ -70,6 +70,7 @@ export default class TodoListItem extends React.Component<
           <button
             className="rounded p-1 w-16 bg-red-400"
             type="button"
+            name="remove"
             onClick={() => onRemove(item)}
           >
             remove
@@ -79,6 +80,7 @@ export default class TodoListItem extends React.Component<
           <button
             className="rounded p-1 w-16 bg-blue-400"
             type="button"
+            name="edit"
             onClick={() => this.setState({ isEditMode: true })}
           >
             edit
@@ -112,6 +114,7 @@ export default class TodoListItem extends React.Component<
           <button
             className="rounded p-1 w-16 bg-blue-400"
             type="button"
+            name="update"
             onClick={() => {
               const todo = item.copyWith({ ...editItem })
               if (todo !== item) {
@@ -127,6 +130,7 @@ export default class TodoListItem extends React.Component<
           <button
             className="rounded p-1 w-16 bg-gray-300"
             type="button"
+            name="cancel"
             onClick={() =>
               this.setState({
                 editItem: {

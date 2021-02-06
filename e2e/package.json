@@ -1,0 +1,14 @@
+{
+  "name": "simple-todo-app",
+  "version": "1.0.0",
+  "scripts": {
+    "gui": "cypress open",
+    "cypress": "cypress run --record --key e0b0c7a2-4168-4dae-a22e-cab9ab3964e8"
+  },
+  "author": "aya-eiya",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "latest",
+    "cypress": "latest"
+  }
+}
