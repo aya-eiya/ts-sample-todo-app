@@ -1,0 +1,15 @@
+{
+  "files": [],
+  "include": [],
+  "compilerOptions": {
+    "target": "ES2018",
+    "module": "esnext",
+    "lib": ["esnext"],
+    "rootDir": ".",
+    "outDir": "dist",
+    "strict": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+  }
+}

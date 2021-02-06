@@ -9,8 +9,14 @@
     "rootDir": "./src",
     "strict": true,
     "skipLibCheck": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "composite": true,
+    "declaration": true,
+    "isolatedModules": true
   },
-  "exclude": ["node_modules"]
-  // "exclude": ["node_modules", "**/*.test.ts" , "**/*.spec.ts"]
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "tests", "build"]
 }

@@ -3,6 +3,8 @@
   "stylelint.enable": true,
   "cSpell.words": [
     "codegen",
+    "datasource",
+    "reduxjs",
     "stylelint",
     "tailwindcss",
     "typegen"

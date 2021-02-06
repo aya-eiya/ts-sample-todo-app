@@ -1,64 +1,74 @@
-import { Todo } from '../../../domain/models/todo';
-import { TodoRepository } from '../../../domain/repositories/todoRepository';
-import { GraphQLClient } from 'graphql-request';
-import { getSdk } from './requests';
-import { env as appEnv } from '../../../app/env';
+import { env as appEnv } from '#/app/env'
+import log from '#/app/log'
+import { Todo, DomainTodo } from '#/domain/models/todo'
+import { TodoRepository } from '#/domain/repositories/todoRepository'
+import { GraphQLClient } from 'graphql-request'
+import { getSdk, Sdk } from './requests'
 
 export class GqlTodoRepository implements TodoRepository {
-  private constructor(env: {
-    endpoint: string | URL
-  }){
-    if(env.endpoint instanceof URL) {
-      this.client = new GraphQLClient(env.endpoint.toString());
-    }
-else {
-      this.client = new GraphQLClient(env.endpoint);
+  private constructor(env: { endpoint: string | URL }) {
+    if (env.endpoint instanceof URL) {
+      const client = new GraphQLClient(env.endpoint.toString())
+      this.sdk = getSdk(client)
+    } else {
+      const client = new GraphQLClient(env.endpoint)
+      this.sdk = getSdk(client)
     }
   }
 
-  private client: GraphQLClient;
+  private sdk: Sdk
 
-  private static instance: TodoRepository;
+  private static instance: TodoRepository
   static getInstance(): TodoRepository {
-    if(!this.instance) {
-      this.instance = new GqlTodoRepository(appEnv);
+    if (!this.instance) {
+      this.instance = new GqlTodoRepository(appEnv)
     }
-    return this.instance;
+    return this.instance
   }
 
   async readAll(): Promise<Todo[]> {
-    return (await getSdk(this.client).readAll()).readAll.filter(t=>t !== undefined).map(t=>
-      Todo.of({...t})
-    );
+    log.debug('repository call readAll')
+    return (await this.sdk.readAll()).readAll
+      .filter((i) => i)
+      .map((i) =>
+        DomainTodo.of({
+          id: i.id,
+          title: i.title,
+          schedule: new Date(i.schedule as number),
+        })
+      )
   }
 
-  async create(todo: Todo): Promise<Todo| undefined> {
-    const t = (await getSdk(this.client).create({...todo})).create;
-    if(t) {
-      return Todo.of({...t});
+  async create(todo: Todo): Promise<Todo | undefined> {
+    log.debug('repository call create')
+    const t = (await this.sdk.create({ ...todo })).create
+    if (t) {
+      return DomainTodo.of({ ...t })
     }
-    return undefined;
+    return undefined
   }
-  async add(todo: Todo): Promise<Todo| undefined> {
-    const t = (await getSdk(this.client).add({...todo})).add;
-    if(t) {
-      return Todo.of({...t});
+
+  async add(todo: Todo): Promise<Todo | undefined> {
+    const t = (await this.sdk.add({ ...todo })).add
+    if (t) {
+      return DomainTodo.of({ ...t })
     }
-    return undefined;
+    return undefined
   }
-  async update(todo: Todo): Promise<Todo| undefined> {
-    const t = (await getSdk(this.client).update({...todo})).update;
-    if(t) {
-      return Todo.of({...t});
+
+  async update(todo: Todo): Promise<Todo | undefined> {
+    const t = (await this.sdk.update({ ...todo })).update
+    if (t) {
+      return DomainTodo.of({ ...t })
     }
-    return undefined;
+    return undefined
   }
+
   async remove(todoId: string): Promise<boolean> {
-    const t = (await getSdk(this.client).remove({id: todoId})).remove;
-    if(t) {
-      return t;
+    const t = (await this.sdk.remove({ id: todoId })).remove
+    if (t) {
+      return t
     }
-    return false;
+    return false
   }
-
 }

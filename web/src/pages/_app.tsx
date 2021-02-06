@@ -1,8 +1,17 @@
-import '../../styles/globals.css';
+import '../../styles/globals.css'
 
-const MyApp = ({ Component, pageProps }: {
-  Component: React.ElementType<Object>;
-  pageProps: Object
-}): JSX.Element => <Component {...pageProps} />;
+import { Provider } from 'react-redux'
+import rootStore from './store'
 
-export default MyApp;
+const MyApp = ({
+  Component,
+  pageProps,
+}: {
+  Component: React.ElementType<never>
+  pageProps: never
+}): JSX.Element => (
+  <Provider store={rootStore}>
+    <Component {...pageProps} />
+  </Provider>
+)
+export default MyApp

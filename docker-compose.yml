@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3"
 services:
   server:
     build: ./server
@@ -11,6 +11,8 @@ services:
     build: ./web
     ports:
       - "3000:3000"
+    links: 
+      - server
     volumes:
       - ./server/src/generated/:/opt/server/src/generated
       - ./web:/opt/app
