@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { Todo, DomainTodo } from '#/domain/models/todo'
 import { useSelector } from 'react-redux'
 import {
@@ -26,10 +26,14 @@ function TodoList(): JSX.Element {
   const { newItem, todos } = useSelector((state: RootState) => state.todo)
   const dispatch: AppDispatch = useDispatch()
 
-  if (!newItem || newItem.toJSON() !== defaultNewItem.toJSON())
-    dispatch(todoRepoCreate(defaultNewItem))
+  useEffect(() => {
+    if (!newItem || newItem.toJSON() !== defaultNewItem.toJSON())
+      dispatch(todoRepoCreate(defaultNewItem))
+  }, [newItem, defaultNewItem, todos, dispatch, todoRepoReadAll])
 
-  if (todos === undefined) dispatch(todoRepoReadAll())
+  useEffect(() => {
+    if (todos === undefined) dispatch(todoRepoReadAll())
+  }, [todos, dispatch, todoRepoReadAll])
 
   const itemUpdate = useCallback(
     (update: Todo) => {
