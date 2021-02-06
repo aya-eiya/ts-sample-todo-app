@@ -7,8 +7,8 @@ const MyApp = ({
   Component,
   pageProps,
 }: {
-  Component: React.ElementType<unknown>
-  pageProps: unknown
+  Component: React.ElementType<never>
+  pageProps: never
 }): JSX.Element => (
   <Provider store={rootStore}>
     <Component {...pageProps} />
