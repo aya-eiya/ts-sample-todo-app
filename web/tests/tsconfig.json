@@ -3,11 +3,11 @@
   "include": [ "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"],
   "references": [{
-    "path": "../"
+    "path": "../",
   }],
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext"],
-    "rootDir": "./",
+    "rootDirs": ["./","../src"],
     "baseUrl": ".",
     "paths": {
       "#/*": ["../src/*"]
