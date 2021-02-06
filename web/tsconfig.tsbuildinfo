@@ -1534,7 +1534,6 @@
       "strict": true,
       "skipLibCheck": true,
       "rootDir": "./src",
-      "outDir": "./dist",
       "forceConsistentCasingInFileNames": true,
       "esModuleInterop": true,
       "moduleResolution": 2,

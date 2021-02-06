@@ -1,4 +1,4 @@
-import { todoSlice } from './todoStore'
+import { todoSlice } from './todoSlice'
 import { configureStore } from '@reduxjs/toolkit'
 import logger from 'redux-logger'
 
@@ -8,7 +8,7 @@ export {
   todoRepoRemove,
   todoRepoUpdate,
   todoRepoCreate,
-} from './todoStore'
+} from './todoSlice'
 
 const store = configureStore({
   reducer: {

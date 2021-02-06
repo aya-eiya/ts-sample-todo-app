@@ -1,4 +1,4 @@
-import { Todo } from '#/domain/models/todo'
+import { Todo, DomainTodo } from '#/domain/models/todo'
 import React from 'react'
 
 interface TodoInputProp {
@@ -40,7 +40,7 @@ export default class TodoInput extends React.Component<
         title,
         schedule: this.state.editTodo.schedule,
       },
-      todo: Todo.newItem({
+      todo: DomainTodo.newItem({
         title,
         schedule: this.state.todo?.schedule || new Date(),
       }),
@@ -58,7 +58,10 @@ export default class TodoInput extends React.Component<
     try {
       const schedule = new Date(value)
       this.setState({
-        todo: Todo.newItem({ title: this.state.editTodo.title, schedule }),
+        todo: DomainTodo.newItem({
+          title: this.state.editTodo.title,
+          schedule,
+        }),
       })
     } catch (e) {
       console.log(e)

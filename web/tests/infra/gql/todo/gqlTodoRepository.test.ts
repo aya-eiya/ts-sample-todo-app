@@ -1,6 +1,6 @@
 import { GqlTodoRepository } from '#/infra/gql/todo/gqlTodoRepository';
 import { TodoRepository } from '#/domain/repositories/todoRepository';
-import { Todo } from '#/domain/models/todo';
+import { Todo, DomainTodo } from '#/domain/models/todo';
 
 // GraphQL Server との E2E テストです
 // テスト間には依存性があり、失敗時に失敗したテストケースだけを
@@ -70,7 +70,7 @@ test('create() gets new item with initialized id', async () => {
   const repo: TodoRepository = GqlTodoRepository.getInstance();
   const title = 'my todo';
   const schedule = dateOf['2021-01-01T04:48:10+0900'];
-  const todo = await repo.create(Todo.newItem({
+  const todo = await repo.create(DomainTodo.newItem({
     title,
     schedule
   }));
@@ -89,7 +89,7 @@ test('add() gets added item with new id', async () => {
   const repo: TodoRepository = GqlTodoRepository.getInstance();
   const title = 'my todo';
   const schedule = dateOf['2021-04-01T01:55:10+0900'];
-  const todo = await repo.create(Todo.newItem({
+  const todo = await repo.create(DomainTodo.newItem({
     title,
     schedule
   }));

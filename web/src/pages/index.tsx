@@ -1,48 +1,64 @@
 import Head from 'next/head'
-import React from 'react'
-import { Todo } from '#/domain/models/todo'
+import React, { useCallback } from 'react'
+import { Todo, DomainTodo } from '#/domain/models/todo'
 import { useSelector } from 'react-redux'
 import {
   AppDispatch,
   RootState,
   todoRepoAdd,
   todoRepoCreate,
-  todoRepoReadAll,
   todoRepoRemove,
   todoRepoUpdate,
-} from './stores'
+  todoRepoReadAll,
+} from './store'
 
 import TodoListItem from '#/view/components/todoListItem'
 import TodoInput from '#/view/components/todoInput'
 
 import { useDispatch } from 'react-redux'
 
+const defaultNewItem = DomainTodo.newItem({
+  title: 'new item',
+  schedule: new Date(),
+})
+
 function TodoList(): JSX.Element {
-  const { todo } = useSelector((state: RootState) => state)
-  const { todos, newItem } = todo
-  const defaultNewItem = Todo.newItem({
-    title: 'new item',
-    schedule: new Date(),
-  })
+  const { newItem, todos } = useSelector((state: RootState) => state.todo)
   const dispatch: AppDispatch = useDispatch()
 
-  dispatch(todoRepoReadAll())
-  dispatch(todoRepoCreate(defaultNewItem))
+  if (!newItem || newItem.toJSON() !== defaultNewItem.toJSON())
+    dispatch(todoRepoCreate(defaultNewItem))
 
-  const todoList = todos.map((item: Todo) => (
-    <TodoListItem
-      item={item}
-      onSubmit={(i) => dispatch(todoRepoUpdate(i))}
-      onRemove={(i) => dispatch(todoRepoRemove(i))}
-    />
+  if (todos === undefined) dispatch(todoRepoReadAll())
+
+  const itemUpdate = useCallback(
+    (update: Todo) => {
+      dispatch(todoRepoUpdate(update))
+    },
+    [dispatch]
+  )
+
+  const itemRemove = useCallback(
+    (remove: Todo) => {
+      dispatch(todoRepoRemove(remove))
+    },
+    [dispatch]
+  )
+
+  const itemAdd = useCallback(
+    (add: Todo) => {
+      dispatch(todoRepoAdd(add))
+    },
+    [dispatch]
+  )
+
+  const todoList = (todos || []).map((todo: Todo) => (
+    <TodoListItem item={todo} onSubmit={itemUpdate} onRemove={itemRemove} />
   ))
   return (
     <div className="flex flex-col h-screen">
       <div className="flex-2 w-auto">
-        <TodoInput
-          onSubmit={(i) => dispatch(todoRepoAdd(i))}
-          newItem={newItem}
-        />
+        <TodoInput onSubmit={itemAdd} newItem={newItem} />
       </div>
       <div className="flex-8 h-96 w-auto overflow-y-scroll">
         <ul className="fex">{todoList}</ul>

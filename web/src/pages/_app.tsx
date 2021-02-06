@@ -1,7 +1,7 @@
 import '../../styles/globals.css'
 
 import { Provider } from 'react-redux'
-import rootStore from './stores'
+import rootStore from './store'
 
 const MyApp = ({
   Component,
